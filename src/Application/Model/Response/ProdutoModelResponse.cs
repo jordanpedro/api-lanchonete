@@ -13,6 +13,6 @@ namespace Application.Model.Response
         public long IdCategoria { get; set; }
         public decimal Preco { get; set; }
         public string? ImagemUrl { get; set; }
-        public DateTime DataCriacao { get; set; }
+        public DateTime? DataCriacao { get; set; }
     }
 }

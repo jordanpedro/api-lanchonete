@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Application.Model.Request;
+using Application.Model.Response;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,11 @@ namespace Application.Services.Interfaces
 {
     public interface IProdutoServices
     {
-        Task<bool> InsertAsync(Produto produto);
-        Task<List<Produto>> GetAllAsync();
-        Task<Produto> GetAsync(long id);
-        Task<List<Produto>> GetByIdCategoriaAsync(long id);
-        Task<bool> UpdateAsync(Produto produto);
+        Task<bool> InsertAsync(ProdutoModelRequest produto);
+        Task<List<ProdutoModelResponse>> GetAllAsync();
+        Task<ProdutoModelResponse> GetAsync(long id);
+        Task<List<ProdutoModelResponse>> GetByIdCategoriaAsync(long id);
+        Task<bool> UpdateAsync(ProdutoModelRequest produto, long id);
         Task<bool> DeleteAsync(long id);
     }
 }

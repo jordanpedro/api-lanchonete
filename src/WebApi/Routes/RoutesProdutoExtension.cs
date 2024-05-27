@@ -1,4 +1,6 @@
 ﻿using Application.Common;
+using Application.Model.Request;
+using Application.Model.Response;
 using Application.Services;
 using Application.Services.Interfaces;
 using Domain.Entities;
@@ -13,18 +15,18 @@ namespace ApiLanchonete.Routes
         const string route = "Produto";
         public static WebApplication AddRoutesProduto(this WebApplication app)
         {
-            app.MapPost("/produto", async (Produto cliente, IProdutoServices produtoServices) =>
+            app.MapPost("/produto", async (ProdutoModelRequest produto, IProdutoServices produtoServices) =>
             {
-                var resposta = await produtoServices.InsertAsync(cliente);
+                var resposta = await produtoServices.InsertAsync(produto);
                 return Results.NoContent();
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Id Categoria disponiveis =>\t 1 Lanche, 2 Acompanhamento, 3 Bebida, 4 Sobremesa",
                 Description = "Id Categoria disponiveis =>\t 1 Lanche, 2 Acompanhamento, 3 Bebida, 4 Sobremesa",
                 Tags = new List<OpenApiTag> { new OpenApiTag() { Name = route } } });
 
-            app.MapPut("/produto", async (Produto cliente, IProdutoServices produtoServices) =>
+            app.MapPut("/produto/{id}", async (ProdutoModelRequest cliente, long id, IProdutoServices produtoServices) =>
             {
-                var resposta = await produtoServices.UpdateAsync(cliente);
+                var resposta = await produtoServices.UpdateAsync(cliente, id);
                 return Results.NoContent();
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Id Categoria disponiveis =>\t 1 Lanche, 2 Acompanhamento, 3 Bebida, 4 Sobremesa",
@@ -34,7 +36,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/produto/id/{id}", async (long id, IProdutoServices produtoServices) =>
             {
                 var resposta = await produtoServices.GetAsync(id);
-                return Results.Json(new Result<Produto>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<ProdutoModelResponse>() { Sucesso = resposta != null, Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Busca produto pelo id",
                 Description = "Busca produto pelo id",
@@ -43,7 +45,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/produto/categoria/{id}", async (long id, IProdutoServices produtoServices) =>
             {
                 var resposta = await produtoServices.GetByIdCategoriaAsync(id);
-                return Results.Json(new Result<List<Produto>>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<List<ProdutoModelResponse>>() { Sucesso = resposta != null, Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Id Categoria disponiveis =>\t 1 Lanche, 2 Acompanhamento, 3 Bebida, 4 Sobremesa",
                 Description = "Id Categoria disponiveis =>\t 1 Lanche, 2 Acompanhamento, 3 Bebida, 4 Sobremesa",
@@ -52,7 +54,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/produto", async (IProdutoServices produtoServices) =>
             {
                 var resposta = await produtoServices.GetAllAsync();
-                return Results.Json(new Result<List<Produto>>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<List<ProdutoModelResponse>>() { Sucesso = resposta != null, Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Busca todos os produtos",
                 Description = "Busca todos os produtos",
