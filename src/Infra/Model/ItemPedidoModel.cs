@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Infra.Model
 {
-    public class ItemPedido : BaseEntity
+    public class ItemPedidoModel : BaseModel
     {
-        public PedidoAgreggate? Pedido { get; set; }
-        public Produto? Produto { get; set; }
+        public long IdPedido { get; set; }
+        public long IdProduto { get; set; }
         public int Quantidade { get; set; }
     }
 }

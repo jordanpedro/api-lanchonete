@@ -14,10 +14,8 @@ namespace Infra.Repositories
 {
     public class ProdutoRepository : RepositoryBase<Produto>, IProdutoRepository
     {
-        private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
         public ProdutoRepository(IDatabaseConnectionFactory databaseConnectionFactory) : base(databaseConnectionFactory)
         {
-            _databaseConnectionFactory = databaseConnectionFactory;
         }
         public async Task<List<Produto>> GetByIdCategoriaAsync(long id)
         {

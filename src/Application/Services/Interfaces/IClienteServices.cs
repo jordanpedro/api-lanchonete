@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using ApiLanchonete.Model.Response;
+using Application.Model.Request;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,11 @@ namespace Application.Services.Interfaces
 {
     public interface IClienteServices
     {
-        Task<bool> InsertAsync(Cliente cliente);
-        Task<List<Cliente>> GetAllAsync();
-        Task<Cliente> GetAsync(long id);
-        Task<Cliente> GetByCpfAsync(string cpf);        
-        Task<bool> UpdateAsync(Cliente cliente);
+        Task<bool> InsertAsync(ClienteModelRequest cliente);
+        Task<List<ClienteModelResponse>> GetAllAsync();
+        Task<ClienteModelResponse> GetAsync(long id);
+        Task<ClienteModelResponse> GetByCpfAsync(string cpf);        
+        Task<bool> UpdateAsync(ClienteModelRequest cliente, long idcliente);
         Task<bool> DeleteAsync(long id);
     }
 }

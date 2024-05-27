@@ -5,16 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Infra.Model
 {
-
-    public class Cliente: BaseEntity
+    public class ProdutoModel : BaseModel
     {
         public string? Nome { get; set; }
-
-        public string? Cpf { get; set; }
-        public string? Email { get; set; }
-
-        public List<PedidoAgreggate>? Pedidos { get; set; }
+        public long IdCategoria { get; set; }
+        public decimal Preco { get; set; }
+        public string? ImagemUrl { get; set; }
     }
 }

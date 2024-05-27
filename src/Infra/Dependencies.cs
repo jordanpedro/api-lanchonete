@@ -1,4 +1,5 @@
 ﻿using Domain.Repositories.Database;
+using Infra.MapperEntities;
 using Infra.Repositories;
 using Infra.Settings;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +46,8 @@ namespace Infra
                     return new PedidoRepository(databaseConnectionFactory!);
                 }
             });
+
+            DapperExtensions.DapperExtensions.SetMappingAssemblies(new[] { Assembly.GetExecutingAssembly() });
 
 
             return services;

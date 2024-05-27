@@ -1,4 +1,7 @@
-﻿using Application.Common;
+﻿
+using ApiLanchonete.Model.Response;
+using Application.Common;
+using Application.Model.Request;
 using Application.Services;
 using Application.Services.Interfaces;
 using Domain.Entities;
@@ -13,7 +16,7 @@ namespace ApiLanchonete.Routes
         const string route = "Categoria";
         public static WebApplication AddRoutesCategoria(this WebApplication app)
         {
-            app.MapPost("/categoria", async (Categoria categoria, ICategoriaServices categoriaServices) =>
+            app.MapPost("/categoria", async (CategoriaModelRequest categoria, ICategoriaServices categoriaServices) =>
             {
                 var resposta = await categoriaServices.InsertAsync(categoria);
                 return Results.NoContent();
@@ -22,9 +25,9 @@ namespace ApiLanchonete.Routes
                 Description = "Cria nova categoria",
                 Tags = new List<OpenApiTag> { new OpenApiTag() { Name = route } } });
 
-            app.MapPut("/categoria", async (Categoria categoria, ICategoriaServices categoriaServices) =>
+            app.MapPut("/categoria/{idcategoria}", async (CategoriaModelRequest categoria, long idcategoria, ICategoriaServices categoriaServices) =>
             {
-                var resposta = await categoriaServices.UpdateAsync(categoria);
+                var resposta = await categoriaServices.UpdateAsync(categoria, idcategoria);
                 return Results.NoContent();
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Atualiza Categoria",
@@ -34,7 +37,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/categoria/{id}", async (long id, ICategoriaServices categoriaServices) =>
             {
                 var resposta = await categoriaServices.GetAsync(id);
-                return Results.Json(new Result<Categoria>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<CategoriaModelResponse>() { Sucesso = resposta != null, Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Busca uma Categoria",
                 Description = "Busca uma Categoria",
@@ -43,7 +46,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/categoria", async (ICategoriaServices categoriaServices) =>
             {
                 var resposta = await categoriaServices.GetAllAsync();
-                return Results.Json(new Result<List<Categoria>>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<List<CategoriaModelResponse>>() { Sucesso = resposta != null, Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Busca todas as Categorias",
                 Description = "Busca todas as Categorias",

@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.Model.Response
 {
-    public class Produto : BaseEntity
+    public class ProdutoModelResponse : BaseModelResponse
     {
         public string? Nome { get; set; }
-        public Categoria? Categoria { get; set; }
+        public long IdCategoria { get; set; }
         public decimal Preco { get; set; }
         public string? ImagemUrl { get; set; }
+        public DateTime DataCriacao { get; set; }
     }
 }

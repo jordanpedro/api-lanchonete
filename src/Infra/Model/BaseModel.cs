@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Infra.Model
 {
-    public class BaseEntity
+    public class BaseModel
     {
         public long Id { get; set; }
         public DateTime? DataCriacao { get; set; }

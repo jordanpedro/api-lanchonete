@@ -1,4 +1,6 @@
-﻿using Application.Services.Interfaces;
+﻿using ApiLanchonete.Model.Response;
+using Application.Model.Request;
+using Application.Services.Interfaces;
 using Domain.Entities;
 using Domain.Repositories.Database;
 using System;
@@ -14,10 +16,44 @@ namespace Application.Services
         private readonly IClienteRepository _clienteRepository;
         public ClienteServices(IClienteRepository clienteRepository) => _clienteRepository = clienteRepository;
         public async Task<bool> DeleteAsync(long id) => await _clienteRepository.DeleteAsync(id);
-        public async Task<List<Cliente>> GetAllAsync() => await _clienteRepository.GetAllAsync();
-        public async Task<Cliente> GetAsync(long id) => await _clienteRepository.GetAsync(id);
-        public async Task<Cliente> GetByCpfAsync(string cpf)  => await _clienteRepository.GetByCpfAsync(cpf);
-        public async Task<bool> InsertAsync(Cliente cliente) => await _clienteRepository.InsertAsync(cliente);
-        public async Task<bool> UpdateAsync(Cliente cliente) => await _clienteRepository.UpdateAsync(cliente);
+        public async Task<List<ClienteModelResponse>> GetAllAsync()
+        {
+            List<ClienteModelResponse> listaRetorno = new List<ClienteModelResponse>();
+
+            var list = await _clienteRepository.GetAllAsync();
+
+            if (list is not null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    listaRetorno.Add(new ClienteModelResponse() { DataCriacao = item.DataCriacao, Id = item.Id, Nome = item.Nome });
+                }
+            }
+            return listaRetorno;
+        }
+        public async Task<ClienteModelResponse> GetAsync(long id)
+        {
+            var entity = await _clienteRepository.GetAsync(id);
+
+            if (entity is not null && entity.Id > 0)
+            {
+                return new ClienteModelResponse() { Id = entity.Id, Nome = entity.Nome, DataCriacao = entity.DataCriacao, Cpf = entity.Cpf, Email = entity.Cpf };
+            }
+            else
+                return new();
+        }
+        public async Task<ClienteModelResponse> GetByCpfAsync(string cpf)
+        {
+            var entity = await _clienteRepository.GetByCpfAsync(cpf);
+
+            if (entity is not null && entity.Id > 0)
+            {
+                return new ClienteModelResponse() { Id = entity.Id, Nome = entity.Nome, DataCriacao = entity.DataCriacao, Cpf = entity.Cpf, Email = entity.Cpf };
+            }
+            else
+                return new();
+        }
+        public async Task<bool> InsertAsync(ClienteModelRequest cliente) => await _clienteRepository.InsertAsync(ClienteModelRequest.FromRequestToEntity(cliente));
+        public async Task<bool> UpdateAsync(ClienteModelRequest cliente, long idcliente) => await _clienteRepository.UpdateAsync(ClienteModelRequest.FromRequestToEntity(cliente, idcliente));
     }
 }

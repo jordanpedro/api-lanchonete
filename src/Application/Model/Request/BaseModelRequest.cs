@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.Model
 {
-    public class BaseEntity
+    public class BaseModelRequest
     {
-        public long Id { get; set; }
-        public DateTime? DataCriacao { get; set; }
+        public long Id { get; set; }        
     }
 }

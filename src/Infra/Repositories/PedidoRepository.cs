@@ -44,7 +44,7 @@ namespace Infra.Repositories
                     {
                         var pedidoaux = lista.FirstOrDefault(p => p.Id == pedido.Id);
                         if (pedidoaux is not null)
-                            pedidoaux.ItensPedido.Add(item);
+                            pedidoaux?.ItensPedido?.Add(item);
                     }
                     return pedido;
                 },

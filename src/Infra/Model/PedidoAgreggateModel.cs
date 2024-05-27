@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Infra.Model
 {
-    public class PedidoAgreggate : BaseEntity
+    public class PedidoAgreggateModel : BaseModel
     {
-        public PedidoAgreggate()
+        public PedidoAgreggateModel()
         {
-            ItensPedido = new List<ItemPedido>();
+            ItensPedido = new List<ItemPedidoModel>();
         }
         public string? Status { get; set; }
-        public Cliente? Cliente { get; set; }
+        public long? IdCliente { get; set; }
         public decimal ValorTotal{ get; set; }     
-        public List<ItemPedido>? ItensPedido { get; set; }
+        public List<ItemPedidoModel> ItensPedido { get; set; }
     }
 }

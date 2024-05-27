@@ -1,4 +1,6 @@
-﻿using Application.Common;
+﻿using ApiLanchonete.Model.Response;
+using Application.Common;
+using Application.Model.Request;
 using Application.Services;
 using Application.Services.Interfaces;
 using Domain.Entities;
@@ -14,7 +16,7 @@ namespace ApiLanchonete.Routes
         {
             const string route = "Cliente";
 
-            app.MapPost("/cliente", async (Cliente cliente,  IClienteServices clienteServices) =>
+            app.MapPost("/cliente", async (ClienteModelRequest cliente,  IClienteServices clienteServices) =>
             {
                var resposta = await clienteServices.InsertAsync(cliente);
                return Results.NoContent();
@@ -23,9 +25,9 @@ namespace ApiLanchonete.Routes
                 Description = "Cria um cliente",
                 Tags = new List<OpenApiTag> { new OpenApiTag() { Name = route } } });
 
-            app.MapPut("/cliente", async (Cliente cliente, IClienteServices clienteServices) =>
+            app.MapPut("/cliente/{idcliente}", async (ClienteModelRequest cliente, long idcliente, IClienteServices clienteServices) =>
             {
-                var resposta = await clienteServices.UpdateAsync(cliente);
+                var resposta = await clienteServices.UpdateAsync(cliente, idcliente);
                 return Results.NoContent();
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Atualiza cliente",
@@ -35,7 +37,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/cliente/id/{id}", async (long id, IClienteServices clienteServices) =>
             {
                 var resposta = await clienteServices.GetAsync(id);
-                return Results.Json(new Result<Cliente>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<ClienteModelResponse>() { Sucesso = resposta != null, Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Busca cliente pelo id",
                 Description = "Busca cliente pelo id",
@@ -44,7 +46,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/cliente/{cpf}", async (string cpf, IClienteServices clienteServices) =>
             {
                var resposta = await clienteServices.GetByCpfAsync(cpf);
-                return Results.Json(new Result<Cliente>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<ClienteModelResponse>() { Sucesso = resposta != null, Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Busca um produto por cpf",
                 Description = "Busca um  produto por cpf",
@@ -53,7 +55,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/cliente", async (IClienteServices clienteServices) =>
             {
                 var resposta = await clienteServices.GetAllAsync();
-                return Results.Json(new Result<List<Cliente>>() { Sucesso = resposta != null , Resposta = resposta });
+                return Results.Json(new Result<List<ClienteModelResponse>>() { Sucesso = resposta != null , Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {Summary = "Busca uma lista de clientes", Description = "Busca uma lista de clientes", Tags = new List<OpenApiTag> { new OpenApiTag() { Name = route } } });
 
             app.MapDelete("/cliente/{id}", async (long id, IClienteServices clienteServices) =>
