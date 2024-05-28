@@ -39,10 +39,8 @@ namespace ApiLanchonete
 
         internal static WebApplication UseServices(this WebApplication app, IWebHostEnvironment env)
         {
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwaggerCustom();
-            }
+
+            app.UseSwaggerCustom();
 
             AddAllRoutes(app);
 

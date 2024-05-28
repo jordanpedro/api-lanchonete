@@ -11,11 +11,11 @@ IF DB_ID('Lanchonete') IS NULL
 BEGIN
 CREATE DATABASE Lanchonete;
 END
-ELSE
-BEGIN 
-drop database Lanchonete
-CREATE DATABASE Lanchonete;
-END
+--ELSE
+--BEGIN 
+--drop database Lanchonete
+--CREATE DATABASE Lanchonete;
+--END
 
 GO
 USE Lanchonete
@@ -92,9 +92,24 @@ END
 
 SET IDENTITY_INSERT [Categoria] ON
 
+IF  NOT EXISTS (SELECT 1 FROM Categoria where Id = 1)
+BEGIN
 INSERT INTO Categoria (Id, Nome) Values(1, 'Lanche')  
+END
+
+IF  NOT EXISTS (SELECT 1 FROM Categoria where Id = 2)
+BEGIN
 INSERT INTO Categoria (Id, Nome) Values(2, 'Acompanhamento')  
+END
+
+IF  NOT EXISTS (SELECT 1 FROM Categoria where Id = 3)
+BEGIN
 INSERT INTO Categoria (Id, Nome) Values(3, 'Bebida')  
+END
+
+IF  NOT EXISTS (SELECT 1 FROM Categoria where Id = 4)
+BEGIN
 INSERT INTO Categoria (Id, Nome) Values(4, 'Sobremesa')  
+END
 
 SET IDENTITY_INSERT [Categoria] OFF

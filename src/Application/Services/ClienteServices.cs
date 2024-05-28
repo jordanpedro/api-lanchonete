@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 
 namespace Application.Services
 {
@@ -26,7 +27,7 @@ namespace Application.Services
             {
                 foreach (var item in list)
                 {
-                    listaRetorno.Add(new ClienteModelResponse() { DataCriacao = item.DataCriacao, Id = item.Id, Nome = item.Nome });
+                    listaRetorno.Add(new ClienteModelResponse() { DataCriacao = item.DataCriacao, Id = item.Id, Nome = item.Nome, Cpf = item.Cpf, Email = item.Cpf });
                 }
             }
             return listaRetorno;

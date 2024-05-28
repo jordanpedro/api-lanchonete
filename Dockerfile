@@ -13,7 +13,7 @@ WORKDIR /app
 
 COPY --from=build /app .
 
-ENV ASPNETCORE_URLS http://+:8001
+ENV ASPNETCORE_URLS http://+:80
 EXPOSE 8001
 
-ENTRYPOINT ["dotnet", "api-lanchonete.dll"]
+ENTRYPOINT ["dotnet", "ApiLanchonete.dll"]

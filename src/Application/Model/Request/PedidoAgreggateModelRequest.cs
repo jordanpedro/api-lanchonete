@@ -23,11 +23,11 @@ namespace Application.Model.Request
             {
                 Cliente = new Cliente()
                 {
-                    Cpf = cliente.Cpf,
-                    Id = cliente.Id,
-                    DataCriacao = cliente.DataCriacao,
-                    Email = cliente.Email,
-                    Nome = cliente.Nome
+                    Cpf = cliente?.Cpf,
+                    Id = cliente?.Id ?? 0,
+                    DataCriacao = cliente?.DataCriacao,
+                    Email = cliente?.Email,
+                    Nome = cliente?.Nome
                 },
                 ValorTotal = valor
             };
