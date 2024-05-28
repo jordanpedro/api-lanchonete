@@ -7,6 +7,8 @@ using Application.Services.Interfaces;
 using Domain.Entities;
 using Application.Services;
 using Application.Common;
+using Application.Model.Request;
+using ApiLanchonete.Model.Response;
 
 namespace ApiLanchonete.Routes
 {
@@ -16,20 +18,20 @@ namespace ApiLanchonete.Routes
         {
         const string route = "Pedido";
 
-            app.MapPost("/pedido", async (PedidoAgreggate pedido, IPedidoServices pedidoServices) =>
+            app.MapPost("/pedido", async (PedidoAgreggateModelRequest pedido, IPedidoServices pedidoServices) =>
             {
                 var resposta = await pedidoServices.InsertAsync(pedido);
                 return Results.NoContent();
             }).WithOpenApi(operation => new(operation)
             {
-                Summary = "Cria pedido",
-                Description = "Endpoint responsavel por criar pedido.",
+                Summary = "Cria pedido. O Cpf é opcional (valor null ou vazio) e o id do produto e sua quantidade deve ser informados.",
+                Description = "Endpoint responsavel por criar pedido. O Cpf é opcional (valor null ou vazio) e o id do produto e sua quantidade deve ser informados.",
                 Tags = new List<OpenApiTag> { new OpenApiTag() { Name = route } }
             }); 
 
             app.MapPut("/pedido/{idpedido}/status/{status}", async (long idpedido, string status, IPedidoServices pedidoServices) =>
             {
-                var resposta = await pedidoServices.UpdateStatusAsync( new PedidoAgreggate() { Id = idpedido, Status = status });
+                var resposta = await pedidoServices.UpdateStatusAsync( new PedidoAgreggateModelRequestUpdatStatus() { Status = status }, idpedido);
                 return Results.NoContent();
             }).WithOpenApi(operation => new(operation)
             {
@@ -43,7 +45,7 @@ namespace ApiLanchonete.Routes
                 var resposta = await pedidoServices.GetByStatusAsync(status);
 
 
-                return Results.Json(new Result<List<PedidoAgreggate>>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<List<PedidoAgreggateModelResponse>>() { Sucesso = resposta != null, Resposta = resposta });
             })
             .WithOpenApi(operation => new(operation)
             {
@@ -55,7 +57,7 @@ namespace ApiLanchonete.Routes
             app.MapGet("/pedido/{id}", async (long id, IPedidoServices pedidoServices) =>
             {
                 var resposta = await pedidoServices.GetAsync(id);
-                return Results.Json(new Result<PedidoAgreggate>() { Sucesso = resposta != null, Resposta = resposta });
+                return Results.Json(new Result<PedidoAgreggateModelResponse>() { Sucesso = resposta != null, Resposta = resposta });
             }).WithOpenApi(operation => new(operation) {
                 Summary = "Busca pedido pelo id",
                 Description = "Busca pedido pelo id",

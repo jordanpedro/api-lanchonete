@@ -11,5 +11,7 @@ namespace Domain.Repositories.Database
     {
         Task<bool> UpdateStatusAsync(PedidoAgreggate pedido); 
         Task<List<PedidoAgreggate>> GetByStatusAsync(string status);
+        Task<long> InsertWithReturnIdAsync(PedidoAgreggate entity);
+       Task<long> InsertItensAsync(ItemPedido entity);
     }
 }

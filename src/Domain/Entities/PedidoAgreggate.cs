@@ -16,6 +16,6 @@ namespace Domain.Entities
         public string? Status { get; set; }
         public Cliente? Cliente { get; set; }
         public decimal ValorTotal{ get; set; }     
-        public List<ItemPedido>? ItensPedido { get; set; }
+        public List<ItemPedido>? ItensPedido { get; set; } = new List<ItemPedido>();
     }
 }

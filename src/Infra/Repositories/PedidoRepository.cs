@@ -2,6 +2,7 @@
 using DapperExtensions;
 using Domain.Entities;
 using Domain.Repositories.Database;
+using Infra.Model;
 using Infra.Settings;
 using System;
 using System.Collections.Generic;
@@ -33,8 +34,8 @@ namespace Infra.Repositories
             using var conn = _databaseConnectionFactory.GetConnection();
             if (conn.State != ConnectionState.Open)
                 conn.Open();
-            await conn.QueryAsync<PedidoAgreggate, Produto, ItemPedido, PedidoAgreggate>($"SELECT P.Id, P.IdCliente, P.DataCriacao, P.ValorTotal, P.Status, PP.Id As Id, PP.Nome, PP.ImagemUrl,ITP.Id as Id,ITP.IdProduto,ITP.IdPedido, ITP.Quantidade, ITP.DataCriacao FROM Pedido P INNER JOIN Itenspedido ITP ON P.id = ITP.IdPedido INNER JOIN Produto PP ON PP.Id = ITP.IdProduto LEFT JOIN Cliente C ON C.Id = P.idcliente WHERE [Status] = '{status}'",
-                (pedido, produto,item) =>
+            await conn.QueryAsync<PedidoAgreggate, Produto, ItemPedido, Categoria, Cliente, PedidoAgreggate>($"  SELECT P.Id, P.DataCriacao, P.ValorTotal, P.Status, PP.Id As Id, PP.Nome, PP.ImagemUrl, PP.Preco, ITP.Id, ITP.Quantidade, ITP.DataCriacao, Cat.Id, Cat.Nome, C.Id, C.Nome, C.Cpf FROM Pedido P INNER JOIN Itenspedido ITP ON P.id = ITP.IdPedido INNER JOIN Produto PP ON PP.Id = ITP.IdProduto INNER JOIN Categoria Cat ON Cat.Id = PP.IdCategoria LEFT JOIN Cliente C ON C.Id = P.idcliente WHERE [Status] =  '{status}'",
+                (pedido, produto,item, categoria, cliente) =>
                 {
                     if(!lista.Any(p => p.Id == pedido.Id))
                     {
@@ -44,31 +45,92 @@ namespace Infra.Repositories
                     {
                         var pedidoaux = lista.FirstOrDefault(p => p.Id == pedido.Id);
                         if (pedidoaux is not null)
+                        {
+                            pedidoaux.Cliente = cliente;
+
+                            Produto prod = new Produto
+                            {
+                                Id = produto.Id,
+                                ImagemUrl = produto.ImagemUrl,
+                                Nome = produto.Nome,
+                                Preco = produto.Preco,
+                                DataCriacao = produto.DataCriacao,
+                                Categoria = categoria
+                            };
+                            item.Produto = prod;
                             pedidoaux?.ItensPedido?.Add(item);
+                        }
                     }
                     return pedido;
                 },
-                splitOn: "Id,Id");
+                splitOn: "Id,Id,Id,Id");
             conn.Close();
             return lista?.AsList() ?? new List<PedidoAgreggate>();
         }
         public override async Task<PedidoAgreggate> GetAsync(long id)
         {
+            PedidoAgreggate pedidoRetorno = default;
+
             using var conn = _databaseConnectionFactory.GetConnection();
             if (conn.State != ConnectionState.Open)
                 conn.Open();
-            var obj = await conn.GetAsync<PedidoAgreggate>(id);
+            await conn.QueryAsync<PedidoAgreggate, Produto, ItemPedido, Categoria, Cliente, PedidoAgreggate>($"  SELECT P.Id, P.DataCriacao, P.ValorTotal, P.Status, PP.Id As Id, PP.Nome, PP.ImagemUrl, PP.Preco, ITP.Id, ITP.Quantidade, ITP.DataCriacao, Cat.Id, Cat.Nome, C.Id, C.Nome, C.Cpf FROM Pedido P INNER JOIN Itenspedido ITP ON P.id = ITP.IdPedido INNER JOIN Produto PP ON PP.Id = ITP.IdProduto INNER JOIN Categoria Cat ON Cat.Id = PP.IdCategoria LEFT JOIN Cliente C ON C.Id = P.idcliente WHERE P.Id = {id}",
+                (pedido, produto, item, categoria, cliente) =>
+                {
+                    if (item is not null)
+                    {
+                        if (pedidoRetorno is null)
+                            pedidoRetorno = pedido;
+
+                        pedidoRetorno.Cliente = cliente;
+
+                            Produto prod = new Produto
+                            {
+                                Id = produto.Id,
+                                ImagemUrl = produto.ImagemUrl,
+                                Nome = produto.Nome,
+                                Preco = produto.Preco,
+                                DataCriacao = produto.DataCriacao,
+                                Categoria = categoria
+                            };
+                            item.Produto = prod;
+                        pedidoRetorno?.ItensPedido?.Add(item);
+                    }
+                    return pedido;
+                },
+                splitOn: "Id,Id,Id,Id");
             conn.Close();
-            return obj ?? new PedidoAgreggate(); 
+            return pedidoRetorno ?? new PedidoAgreggate(); 
         }
         public override async Task<bool> InsertAsync(PedidoAgreggate entity)
         {
             using var conn = _databaseConnectionFactory.GetConnection();
             if (conn.State != ConnectionState.Open)
                 conn.Open();
-            var id = await conn.InsertAsync(entity);
+            var model = PedidoAgreggateModel.FromEntityToModelInInsert(entity);
+            var id = await conn.InsertAsync(model);
             conn.Close();
             return id > 0;
+        }
+        public async Task<long> InsertWithReturnIdAsync(PedidoAgreggate entity)
+        {
+            using var conn = _databaseConnectionFactory.GetConnection();
+            if (conn.State != ConnectionState.Open)
+                conn.Open();
+            var model = PedidoAgreggateModel.FromEntityToModelInInsert(entity);
+            var id = await conn.InsertAsync(model);
+            conn.Close();
+            return id;
+        }
+        public async Task<long> InsertItensAsync(ItemPedido entity)
+        {
+            using var conn = _databaseConnectionFactory.GetConnection();
+            if (conn.State != ConnectionState.Open)
+                conn.Open();
+            var model = ItemPedidoModel.FromEntityToModel(entity);
+            var id = await conn.InsertAsync(model);
+            conn.Close();
+            return id;
         }
     }
 }

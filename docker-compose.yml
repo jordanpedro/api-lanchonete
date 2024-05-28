@@ -1,6 +1,4 @@
 version: '3.8'
-
-
 volumes:
   sqlserver_data:  
 services:
@@ -33,3 +31,25 @@ services:
       /opt/mssql-tools/bin/sqlcmd -S sqlserver -U fiap -P ${DB_PASSWORD} -d master -i docker-entrypoint-initdb.d/init.sql;
       echo "Pronto!";
       '
+  api:
+    container_name: api
+    hostname: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:80"
+    expose:
+      - 80
+    env_file:
+      - .env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    restart: always
+    networks:
+      - default
+    depends_on:
+      - sqlserver      

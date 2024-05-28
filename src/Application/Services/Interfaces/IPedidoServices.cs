@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using ApiLanchonete.Model.Response;
+using Application.Model.Request;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,10 @@ namespace Application.Services.Interfaces
 {
     public interface IPedidoServices
     {
-        Task<bool> InsertAsync(PedidoAgreggate pedido);
-        Task<PedidoAgreggate> GetAsync(long id);
-        Task<bool> UpdateStatusAsync(PedidoAgreggate pedido);
-        Task<List<PedidoAgreggate>> GetByStatusAsync(string status);
+        Task<bool> InsertAsync(PedidoAgreggateModelRequest pedido);
+        Task<PedidoAgreggateModelResponse> GetAsync(long id);
+        Task<bool> UpdateStatusAsync(PedidoAgreggateModelRequestUpdatStatus pedido, long id);
+        Task<List<PedidoAgreggateModelResponse>> GetByStatusAsync(string status);
         
     }
 }

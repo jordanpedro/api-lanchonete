@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace ApiLanchonete.Model.Response
 {
-    public class ItemPedidoModelResponse : BaseModelResponse
+    public class ItemPedidoModelResponse
     {
-        public long IdPedido { get; set; }
-        public long IdProduto { get; set; }
+        public string? NomeProduto { get; set; }
+        public string? CategoriaProduto { get; set; }
         public int Quantidade { get; set; }
-        public DateTime DataCriacao { get; set; }
     }
 }
