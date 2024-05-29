@@ -19,6 +19,7 @@ Para solucionar o problema, a lanchonete irá investir em um sistema de autoaten
 4- Abra o terminal e vá até a raiz deste projeto<br>
 5- Execute o comando docker-compose up <br>
 6- Acesse o Swagger em http://localhost:5000/swagger/index.html<br>
+> Apenas para conhecimento: O script inicial da aplicacao esta na pasta init
 
 ## Acesso aos dados
 1- Acesse uma instancia do Sql Server Management Studio ou outro client semelhante:
@@ -27,3 +28,4 @@ Para solucionar o problema, a lanchonete irá investir em um sistema de autoaten
 >Usuário: rmjordan <br>
 >Senha: fiap@2024 <br>
 >Nome do Banco: Lanchonete  <br>
+
