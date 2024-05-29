@@ -22,7 +22,7 @@ namespace ApiLanchonete.Middleware
             string body = string.Empty;
             try
             {
-                body = await FormatarRequest(context.Request)
+                body = await RequestFormat(context.Request)
                     .ConfigureAwait(false);
                 await _next(context);
             }
@@ -32,7 +32,7 @@ namespace ApiLanchonete.Middleware
             }
         }
 
-        private static async Task<string> FormatarRequest(HttpRequest request)
+        private static async Task<string> RequestFormat(HttpRequest request)
         {
             request.EnableBuffering();
             request.Body.Position = 0;
