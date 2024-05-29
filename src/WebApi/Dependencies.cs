@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using Infra;
 using Application;
 using Domain;
+using ApiLanchonete.Middleware;
 
 namespace ApiLanchonete
 {
@@ -41,7 +42,7 @@ namespace ApiLanchonete
         {
 
             app.UseSwaggerCustom();
-
+            app.UseCustomExceptionHandler();
             AddAllRoutes(app);
 
             return app;
