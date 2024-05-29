@@ -29,7 +29,7 @@ namespace ApiLanchonete.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex, body);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
