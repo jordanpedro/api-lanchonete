@@ -12,43 +12,38 @@ namespace ApiLanchonete.Middleware
     public class  ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
+        public ExceptionHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            string bodyRequest = string.Empty;
+            string body = string.Empty;
             try
             {
-                bodyRequest = await FormatarRequest(context.Request).ConfigureAwait(false);
+                body = await FormatarRequest(context.Request)
+                    .ConfigureAwait(false);
                 await _next(context);
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex, bodyRequest);
+                await HandleExceptionAsync(context, ex, body);
             }
         }
 
         private static async Task<string> FormatarRequest(HttpRequest request)
         {
             request.EnableBuffering();
-
             request.Body.Position = 0;
-
             using var reader = new StreamReader(request.Body, Encoding.UTF8, leaveOpen: true);
             var stringBody = await reader.ReadToEndAsync();
-
-            request.Body.Position = 0;  //resetando ponteiro do stream
-
+            request.Body.Position = 0;  
             return stringBody;
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception, string bodyRequest)
+        private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var result = string.Empty;
 
@@ -66,7 +61,7 @@ namespace ApiLanchonete.Middleware
     [ExcludeFromCodeCoverage]
     public static class ExceptionHandlerMiddlewareExtensions
     {
-        public static IApplicationBuilder UseCustomExceptionHandler(this WebApplication app)
+        public static IApplicationBuilder UseExceptionHandler(this WebApplication app)
         {
             return app.UseMiddleware<ExceptionHandlerMiddleware>();
         }

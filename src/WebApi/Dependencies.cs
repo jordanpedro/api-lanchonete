@@ -42,7 +42,7 @@ namespace ApiLanchonete
         {
 
             app.UseSwaggerCustom();
-            app.UseCustomExceptionHandler();
+            app.UseExceptionHandler();
             AddAllRoutes(app);
 
             return app;
