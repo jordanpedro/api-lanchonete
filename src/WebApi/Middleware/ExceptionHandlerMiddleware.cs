@@ -12,7 +12,6 @@ namespace ApiLanchonete.Middleware
     public class  ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-
         public ExceptionHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -58,7 +57,6 @@ namespace ApiLanchonete.Middleware
         }
     }
 
-    [ExcludeFromCodeCoverage]
     public static class ExceptionHandlerMiddlewareExtensions
     {
         public static IApplicationBuilder UseExceptionHandler(this WebApplication app)
