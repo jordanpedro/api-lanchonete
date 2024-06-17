@@ -26,6 +26,6 @@ Para solucionar o problema, a lanchonete irá investir em um sistema de autoaten
 # Credenciais
 >Host: localhost <br>
 >Usuário: rmjordan <br>
->Senha: fiap@2024 <br>
+>Senha: fiap@2025 <br>
 >Nome do Banco: Lanchonete  <br>
 

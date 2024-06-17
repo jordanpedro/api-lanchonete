@@ -7,16 +7,13 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=${DB_PASSWORD}
-      - MSSQL_PID=Developer
     ports:
       - 1433:1433
-    volumes:
-      - sqlserver_data:/var/opt/mssql
     restart: always
     networks:
       - default    
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U fiap -P ${DB_PASSWORD} -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P ${DB_PASSWORD} -Q 'SELECT 1' || exit 1"]
       interval: 10s
       retries: 10
       start_period: 10s
@@ -30,7 +27,7 @@ services:
         condition: service_healthy
     command: >
       bash -c '
-      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U fiap -P ${DB_PASSWORD} -d master -i docker-entrypoint-initdb.d/init.sql;
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P ${DB_PASSWORD} -d master -i docker-entrypoint-initdb.d/init.sql;
       echo "Pronto!";
       '
   api:
