@@ -3,8 +3,9 @@ GO
 
 IF NOT EXISTS (SELECT * FROM sys.sql_logins WHERE name = 'rmjordan')
 BEGIN
-    CREATE LOGIN rmjordan WITH PASSWORD = 'fiap@2024', CHECK_POLICY = OFF;
+    CREATE LOGIN rmjordan WITH PASSWORD = 'fiap@2025', CHECK_POLICY = OFF;
     ALTER SERVER ROLE [sysadmin] ADD MEMBER rmjordan;
+    CREATE USER [rmjordan] FOR LOGIN [rmjordan];
 END
 GO
 IF DB_ID('Lanchonete') IS NULL
@@ -19,6 +20,14 @@ END
 
 GO
 USE Lanchonete
+
+GO
+IF NOT EXISTS (SELECT * FROM sys.sql_logins WHERE name = 'rmjordan')
+BEGIN
+    CREATE LOGIN rmjordan WITH PASSWORD = 'fiap@2025', CHECK_POLICY = OFF;
+    ALTER SERVER ROLE [sysadmin] ADD MEMBER rmjordan;
+    CREATE USER [rmjordan] FOR LOGIN [rmjordan];
+END
 
 GO
 
