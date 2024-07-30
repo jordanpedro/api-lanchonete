@@ -67,6 +67,47 @@ namespace Infra.Repositories
             conn.Close();
             return lista?.AsList() ?? new List<PedidoAgreggate>();
         }
+
+        public async Task<List<PedidoAgreggate>> GetAllAsync()
+        {
+            List<PedidoAgreggate> lista = new List<PedidoAgreggate>();
+
+            using var conn = _databaseConnectionFactory.GetConnection();
+            if (conn.State != ConnectionState.Open)
+                conn.Open();
+            await conn.QueryAsync<PedidoAgreggate, Produto, ItemPedido, Categoria, Cliente, PedidoAgreggate>($"SELECT P.Id, P.DataCriacao, P.ValorTotal, P.Status, PP.Id As Id, PP.Nome, PP.ImagemUrl, PP.Preco, ITP.Id, ITP.Quantidade, ITP.DataCriacao, Cat.Id, Cat.Nome, C.Id, C.Nome, C.Cpf FROM Pedido P INNER JOIN Itenspedido ITP ON P.id = ITP.IdPedido INNER JOIN Produto PP ON PP.Id = ITP.IdProduto INNER JOIN Categoria Cat ON Cat.Id = PP.IdCategoria LEFT JOIN Cliente C ON C.Id = P.idcliente WHERE P.Status IN ('pronto', 'empreparacao', 'recebido') ORDER BY CASE P.Status WHEN 'pronto' THEN 1  WHEN 'empreparacao' THEN 2  WHEN 'recebido' THEN 3  ELSE 4  END, P.DataCriacao ASC",
+                (pedido, produto, item, categoria, cliente) =>
+                {
+                    if (!lista.Any(p => p.Id == pedido.Id))
+                    {
+                        lista.Add(pedido);
+                    }
+                    if (item is not null)
+                    {
+                        var pedidoaux = lista.FirstOrDefault(p => p.Id == pedido.Id);
+                        if (pedidoaux is not null)
+                        {
+                            pedidoaux.Cliente = cliente;
+
+                            Produto prod = new Produto
+                            {
+                                Id = produto.Id,
+                                ImagemUrl = produto.ImagemUrl,
+                                Nome = produto.Nome,
+                                Preco = produto.Preco,
+                                DataCriacao = produto.DataCriacao,
+                                Categoria = categoria
+                            };
+                            item.Produto = prod;
+                            pedidoaux?.ItensPedido?.Add(item);
+                        }
+                    }
+                    return pedido;
+                },
+                splitOn: "Id,Id,Id,Id");
+            conn.Close();
+            return lista?.AsList() ?? new List<PedidoAgreggate>();
+        }
         public override async Task<PedidoAgreggate> GetAsync(long id)
         {
             PedidoAgreggate pedidoRetorno = default;
