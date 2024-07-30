@@ -17,7 +17,11 @@
       "applicationUrl": "http://localhost:8002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "CONNECTION_STRING": "Data Source=localhost;User Id=rmjordan; Initial Catalog=Lanchonete; Password=fiap@2024; TrustServerCertificate=True"
+        "DB_HOST": "localhost",
+        "DB_USERNAME": "rmjordan",
+        "DB_NAME": "Lanchonete",
+        "DB_PASSWORD": "fiap@2025",
+        "PORT_NUMBER": "30008"
       }
     }
   }

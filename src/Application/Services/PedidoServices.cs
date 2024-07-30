@@ -36,7 +36,7 @@ namespace Application.Services
             else
                 return new();
         }
-        public async Task<bool> InsertAsync(PedidoAgreggateModelRequest pedido)
+        public async Task<long> InsertAsync(PedidoAgreggateModelRequest pedido)
         {
             if (pedido?.ItensPedido?.Count() > 0)
             {
@@ -70,7 +70,7 @@ namespace Application.Services
                         await _pedidoRepository.InsertItensAsync(ItemPedidoModelRequest.FromRequestToEntity(item, idPedido));
                     }
 
-                    return true;
+                    return idPedido;
                 }
                 else
                     throw new FalhaNaGeracaoDoPedidoException("Houve uma falha na geeracao do pedido. Tente novamente mais tarde.");
@@ -89,6 +89,20 @@ namespace Application.Services
             if (entities is not null && entities?.Any() == true)
             {
                 foreach (var entity in  entities)
+                    entitiesResponse.Add(PedidoAgreggateModelResponse.FromEntityToResponse(entity));
+                return entitiesResponse;
+            }
+            else
+                return new();
+        }
+        public async Task<List<PedidoAgreggateModelResponse>> GetAllAsync()
+        {
+            List<PedidoAgreggateModelResponse> entitiesResponse = new List<PedidoAgreggateModelResponse>();
+            List<PedidoAgreggate> entities = await _pedidoRepository.GetAllAsync();
+
+            if (entities is not null && entities?.Any() == true)
+            {
+                foreach (var entity in entities)
                     entitiesResponse.Add(PedidoAgreggateModelResponse.FromEntityToResponse(entity));
                 return entitiesResponse;
             }

@@ -15,6 +15,7 @@ namespace Application
             services.AddScoped<IProdutoServices, ProdutoServices>();
             services.AddScoped<ICategoriaServices, CategoriaServices>();
             services.AddScoped<IPedidoServices, PedidoServices>();
+            services.AddScoped<IPedidoFormaPagamentoServices, PedidoFormaPagamentoServices>();
             return services;
         }
     }

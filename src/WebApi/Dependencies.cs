@@ -54,6 +54,7 @@ namespace ApiLanchonete
             app.AddRoutesCategoria();
             app.AddRoutesPedido();
             app.AddRoutesProduto();
+            app.AddRoutesPedidoPagamento();
             return app;
         }
 

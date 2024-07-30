@@ -46,7 +46,14 @@ namespace Infra
                     return new PedidoRepository(databaseConnectionFactory!);
                 }
             });
-
+            services.AddScoped<IPedidoFormaPagamentoRepository, PedidoFormaPagamentoRepository>(sp =>
+            {
+                using (var scope = sp.CreateScope())
+                {
+                    var databaseConnectionFactory = scope.ServiceProvider.GetService<IDatabaseConnectionFactory>();
+                    return new PedidoFormaPagamentoRepository(databaseConnectionFactory!);
+                }
+            });
             DapperExtensions.DapperExtensions.SetMappingAssemblies(new[] { Assembly.GetExecutingAssembly() });
 
 

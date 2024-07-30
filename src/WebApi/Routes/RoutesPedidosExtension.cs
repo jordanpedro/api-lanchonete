@@ -21,7 +21,7 @@ namespace ApiLanchonete.Routes
             app.MapPost("/pedido", async (PedidoAgreggateModelRequest pedido, IPedidoServices pedidoServices) =>
             {
                 var resposta = await pedidoServices.InsertAsync(pedido);
-                return Results.NoContent();
+                return Results.Ok(new { IdentificadorDoPedido = resposta });
             }).WithOpenApi(operation => new(operation)
             {
                 Summary = "Cria pedido. O Cpf é opcional (valor null ou vazio) e o id do produto e sua quantidade deve ser informados.",
@@ -62,6 +62,18 @@ namespace ApiLanchonete.Routes
                 Summary = "Busca pedido pelo id",
                 Description = "Busca pedido pelo id",
                 Tags = new List<OpenApiTag> { new OpenApiTag() { Name = route } } });
+
+            app.MapGet("/pedido/fila", async (IPedidoServices pedidoServices) =>
+            {
+                var resposta = await pedidoServices.GetAllAsync();
+                return Results.Json(new Result<List<PedidoAgreggateModelResponse>>() { Sucesso = resposta != null, Resposta = resposta });
+            })
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Busca pedidos de forma ordenada por status : pronto empreparacao, recebido e orderna tambem de forma ascendente.",
+                Description = "Busca pedidos de forma ordenada por status : pronto empreparacao, recebido e orderna tambem de forma ascendente.",
+                Tags = new List<OpenApiTag> { new OpenApiTag() { Name = route } }
+            });
 
             return app;
         }

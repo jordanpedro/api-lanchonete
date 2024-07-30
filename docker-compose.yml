@@ -44,10 +44,10 @@ services:
       - .env
     environment:
       DB_HOST: ${DB_HOST}
-      DB_USER: ${DB_USERNAME}
+      DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      CONNECTION_STRING: "Data Source=${DB_HOST};User Id=${DB_USERNAME}; Initial Catalog=${DB_NAME}; Password=${DB_PASSWORD}; TrustServerCertificate=True"
+      PORT_NUMBER: ${PORT_NUMBER}
     restart: always
     networks:
       - default

@@ -122,3 +122,56 @@ INSERT INTO Categoria (Id, Nome) Values(4, 'Sobremesa')
 END
 
 SET IDENTITY_INSERT [Categoria] OFF
+
+--
+IF  NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FormaPagamento]') AND type in (N'U'))
+BEGIN
+create table FormaPagamento(
+Id BIGINT IDENTITY(1,1) Primary key,
+Nome varchar(100)  NULL ,
+DataCriacao DATETIME2(3) NOT NULL  DEFAULT GETDATE(),
+)
+
+END
+--
+
+IF  NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PedidoFormaPagamento]') AND type in (N'U'))
+BEGIN
+create table PedidoFormaPagamento(
+Id BIGINT IDENTITY(1,1) Primary key,
+IdPedido  BIGINT ,
+IdFormaPagamento  BIGINT ,
+DataCriacao DATETIME2(3) NOT NULL  DEFAULT GETDATE(),
+Status varchar(20)  NULL,
+FOREIGN KEY (IdPedido) REFERENCES Pedido(Id),
+FOREIGN KEY (IdFormaPagamento) REFERENCES FormaPagamento(Id)
+)
+
+END
+--
+--inserts
+
+SET IDENTITY_INSERT [FormaPagamento] ON
+
+IF  NOT EXISTS (SELECT 1 FROM FormaPagamento where Id = 1)
+BEGIN
+INSERT INTO FormaPagamento (Id, Nome) Values(1,'Pix')  
+END
+
+IF  NOT EXISTS (SELECT 1 FROM FormaPagamento where Id = 2)
+BEGIN
+INSERT INTO FormaPagamento (Id, Nome) Values(2, 'Cartao de credito (mastercard)')  
+END
+
+IF  NOT EXISTS (SELECT 1 FROM FormaPagamento where Id = 3)
+BEGIN
+INSERT INTO FormaPagamento (Id, Nome) Values(3, 'Debito')  
+END
+
+IF  NOT EXISTS (SELECT 1 FROM FormaPagamento where Id = 4)
+BEGIN
+INSERT INTO FormaPagamento (Id, Nome) Values(4, 'Cartao de credito (visa)')  
+END
+
+SET IDENTITY_INSERT [FormaPagamento] OFF
+--

@@ -11,10 +11,11 @@ namespace Application.Services.Interfaces
 {
     public interface IPedidoServices
     {
-        Task<bool> InsertAsync(PedidoAgreggateModelRequest pedido);
+        Task<long> InsertAsync(PedidoAgreggateModelRequest pedido);
         Task<PedidoAgreggateModelResponse> GetAsync(long id);
         Task<bool> UpdateStatusAsync(PedidoAgreggateModelRequestUpdatStatus pedido, long id);
         Task<List<PedidoAgreggateModelResponse>> GetByStatusAsync(string status);
-        
+        Task<List<PedidoAgreggateModelResponse>> GetAllAsync();
+
     }
 }
