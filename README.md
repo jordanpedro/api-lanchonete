@@ -13,19 +13,31 @@ Sem ele, expandir a lanchonete pode acabar não dando certo, resultando em clien
 Para solucionar o problema, a lanchonete irá investir em um sistema de autoatendimento de fast food, que é composto por uma série de dispositivos e interfaces que permitem aos clientes selecionar e fazer pedidos sem precisar interagir com um atendente.
 
 ## Para execucao da aplicacao:
-1- Clonar este repositorio <br>
-2- Instale o Docker Desktop<br>
-3- navegue até a raiz do projeto e localize o arquivo docker-compose.yml<br>
-4- Abra o terminal e vá até a raiz deste projeto<br>
-5- Execute o comando docker-compose up <br>
-6- Acesse o Swagger em http://localhost:5000/swagger/index.html<br>
-> Apenas para conhecimento: O script inicial da aplicacao está na pasta init e deverá ser executado por container na chamada do docker compose.
+ 1-Iniciar Docker Desktop (habilitando a opcao do kubernetes enable)
+ 2-Abrir o terminal
+ 3-Ir ate a raiz do repositório da aplicacao
+ 4-Ir para diretorio do kubernetes pelo terminal
+ 5-digite kubectl create ns api-lanchonete-jordan
+ 6-kubectl apply -f ./ -n api-lanchonete-jordan (vai aplicar os yamls disponiveis na pasta)
+	*OBS: Aguarde o pod de banco de dados (sql server) subir pois deve levar alguns minutos para fazer o download da imagem.
+ 
+  Apos Pod da aplicacao e do banco de dados estarem disponiveis, acesse:
+  http://localhost:30007/swagger/index.html
+  
+> Apenas para conhecimento: O script inicial da aplicacao está na pasta /var/tmp dentro do container do servico SQL server. Foi criado o script inicial e copiado
+ para dentro da pasta /var/tmp no container do sql server e apartir disso criei um novo container sql server e publiquei em meu repo no docker hub.
+ O script será executado automaticamente
 
 ## Acesso aos dados
 1- Acesse uma instancia do Sql Server Management Studio ou outro client semelhante:
 # Credenciais
->Host: localhost <br>
+>Host: localhost,30008 <br>
 >Usuário: rmjordan <br>
 >Senha: fiap@2025 <br>
 >Nome do Banco: Lanchonete  <br>
 
+## Arquitetura
+![Arquitetura drawio](https://github.com/user-attachments/assets/ced8a56e-eca8-4fdb-98f3-1806a5a615c6)
+
+
+Link do youtube com arquitetura: https://youtu.be/etsxha6GCgA
