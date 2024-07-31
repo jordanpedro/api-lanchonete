@@ -26,8 +26,8 @@ Para solucionar o problema, a lanchonete irá investir em um sistema de autoaten
   http://localhost:30007/swagger/index.html   <br>
   
 > Apenas para conhecimento: O script inicial da aplicacao está na pasta /var/tmp dentro do container do servico SQL server. Foi criado o script inicial e copiado
- para dentro da pasta /var/tmp no container do sql server e apartir disso criei um novo container sql server e publiquei em meu repo no docker hub.
- O script será executado automaticamente
+ para dentro da pasta /var/tmp no container do sql server e apartir disso criei uma nova imagem sql server e publiquei em meu repo no docker hub.<br>
+ *O script inicial será executado automaticamente.
 
 ## Acesso aos dados
 1- Acesse uma instancia do Sql Server Management Studio ou outro client semelhante:
